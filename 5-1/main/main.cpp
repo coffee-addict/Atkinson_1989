@@ -2,7 +2,7 @@
 
 using namespace std;
 
-#define FOR(i,s,e) for(int (i)=(s);(i)<(int)(e);(i)++)
+#define FOR(i,s,e) for(int i=(s);(i)<(int)(e);(i)++)
 #define REP(i,e) FOR(i,0,e)
 #define each(it,c) for(__typeof((c).begin()) it=(c).begin();it!=(c).end();it++)
 #define all(o) (o).begin(), (o).end()
@@ -68,7 +68,7 @@ int main() {
     printf("case (%c):\n", 'a'+i);
     puts("n e r");
     FOR(j,2,M) res[1][j] = (res[0][j] - res[0][j-1])/(res[0][j+1] - res[0][j]);
-    FOR(j,1,M+1) printf("%d %f, %f\n", 1<<j, res[0][j], res[1][j]);
+    FOR(j,1,M+1) printf("%d %.10f %.10f\n", 1<<j, res[0][j], res[1][j]);
   }
   return 0;
 }

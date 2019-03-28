@@ -29,21 +29,18 @@ a = np.array([0, 0, -4, 0, 0])
 b = np.array([1, 1, 4, PI*2, PI])
 fn = np.array([fa, fb, fc, fd, fe])
 
-def set_xys(i, n):
-    xs = np.arange(a[i], b[i], (b[i] - a[i])/n)
+def calc_gauss_legendre(i, n):
+    xs, ws = np.polynomial.legendre.leggauss(n+1)
+    xs = (xs + 1)*(b[i] - a[i])*0.5 + a[i]
     ys = np.array(fn[i](xs))
-    xs = np.append(xs,b[i])
-    ys = np.append(ys,fn[i](b[i]))
-    return xs, ys
+    return sum(ws * ys)*(b[i] - a[i])*0.5
 
 for i in range(NF):
     res = np.zeros((2,M+1))
     m = 1
     n = 1<<m
     while m <= M:
-        h = (b[i] - a[i])/n
-        xs, ys = set_xys(i, n)
-        res[0][m] = np.trapz(ys, x=xs, dx=h)
+        res[0][m] = calc_gauss_legendre(i,n)
         m += 1
         n *= 2
     print('case ({0}):'.format(chr(ord('a')+i)))

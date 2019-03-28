@@ -56,15 +56,15 @@ void init(int i) {
 int main() {
   REP(i,NF) {
     init(i);
-    int m = 1, n = 1<<m;
+    res[0][0] = (ys[0] + ys[N])*0.5;
+    int m = 1, n = 1;
     while (m <= M) {
-      double h = (b[i] - a[i])/n;
-      res[0][m] = (ys[0] + ys[n])*0.5;
-      FOR(j,1,n) res[0][m] += ys[j*N/n];
-      res[0][m] *= h;
+      res[0][m] = res[0][m-1];
+      REP(j,n) res[0][m] += ys[N*(j*2+1)/(n*2)];
       m++;
-      n *= 2;
+      n <<= 1;
     }
+    REP(j,M+1) res[0][j] *= (b[i]-a[i])/(1<<j);
     printf("case (%c):\n", 'a'+i);
     puts("n e r");
     FOR(j,2,M) res[1][j] = (res[0][j] - res[0][j-1])/(res[0][j+1] - res[0][j]);

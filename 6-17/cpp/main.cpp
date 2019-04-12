@@ -124,7 +124,7 @@ void calc_ode_trapezoidal(int i_f, int i_div, int i_itr) {
     //iterations
     REP(j,i_itr+1) {
       res[0][i+1] = f(i_f, xs[i], res[0][i]) + f(i_f, xs[i+1], res[0][i+1]);
-      res[0][i+1] += res[0][i+1]*h*0.5 + res[0][i];
+      res[0][i+1] = res[0][i+1]*h*0.5 + res[0][i];
       res[1][i+1] = ys[i+1] - res[0][i+1];
     }
     res[2][i+1] = max(abs(ys_d3[i+1]), abs(ys_d3[i]));
@@ -142,7 +142,7 @@ void output(int i_f, int i_div) {
 
 int main() {
   REP(i,NF) REP(j,M) REP(k,I) {
-if (i!=0 || j!=0 || k!=0) continue;
+if (i!=0 || j!=1 || k!=0) continue;
     init(i,j);
     calc_ode_trapezoidal(i,j,k);
     output(i,j);

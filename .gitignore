@@ -2,3 +2,6 @@
 *.in
 *.out
 *.swp
+*.aux
+*.dvi
+*.log

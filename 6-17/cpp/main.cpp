@@ -48,7 +48,7 @@ double f(int i_f, double x, double y) {
   return res;
 }
 
-double y_d0(int i_f, double x) {
+double fn_y_d0(int i_f, double x) {
   double res = 0;
   switch(i_f) {
     case 0:
@@ -70,8 +70,8 @@ double y_d0(int i_f, double x) {
   return res;
 }
 
-double y_d3(int i_f, double x) {
-  double res = 0;
+double fn_y_d3(int i_f, double x) {
+  double res = 0, tmp = 0;
   switch(i_f) {
     case 0:
       res = 1;
@@ -79,9 +79,9 @@ double y_d3(int i_f, double x) {
       res = -6.0/res;
       break;
     case 1:
+      tmp = 1;
       res = 361.0 + exp(x*0.5) - exp(x*0.25)*76;
       res *= exp(x*0.25)*95;
-      double tmp = 1;
       REP(i,4) tmp *= (exp(x*0.25) + 19);
       res /= 16*tmp;
       REP(i,4) res *= (1.0 + x);
@@ -108,44 +108,44 @@ void init(int i_f, int i_div) {
   memset(res, 0, sizeof(res));
   REP(k,n[i_div]) {
     xs[k] = a[i_f] + h*k;
-    ys[k] = y_d0(i_f, xs[k]);
-    ys_d3[k] = f_d3(i_f, xs[k]);
+    ys[k] = fn_y_d0(i_f, xs[k]);
+    ys_d3[k] = fn_y_d3(i_f, xs[k]);
   }
   xs[n[i_div]] = b[i_f];
-  ys[n[i_div]] = y_d0(i_f, b[i_f]);
-  f_d3[n[i_div]] = y_d3(i_f, b[i_f]);
+  ys[n[i_div]] = fn_y_d0(i_f, b[i_f]);
+  ys_d3[n[i_div]] = fn_y_d3(i_f, b[i_f]);
 }
 
-//void calc_euler(int i, int j) {
-//  res[0][0] = ys[0];
-//  REP(k,n[j]) {
-//    res[0][k+1] = res[0][k] + h*f_p[i](xs[k],ys[k]);
-//    res[1][k+1] = ys[k+1] - res[0][k+1];
-//    res[2][k+1] = max(abs(ys_d2[k+1]), abs(ys_d2[k]))*h*0.5;
-//    res[2][k+1] *= exp(lipschitz_c[i]*(xs[k+1]-xs[0])) - 1;
-//    res[2][k+1] /= lipschitz_c[i];
-//  }
-//}
-void calc_ode_trapezoidal(int i_f, int i_div, i_itr) {
-  //res[3][N+1]; //y_h, |y_h - y|, bound(|y(t_n)-y_h(t_n)|)
+void calc_ode_trapezoidal(int i_f, int i_div, int i_itr) {
   res[0][0] = ys[0];
-  REP(i,i_div) {
+  REP(i,n[i_div]) {
+    //initial guess(midpoint method)
     res[0][i+1] = i ? res[0][i-1] + f(i_f, xs[i], res[0][i])*h*2 : res[0][0];
-    REP(j,i_itr) {
+    //iterations
+    REP(j,i_itr+1) {
       res[0][i+1] = f(i_f, xs[i], res[0][i]) + f(i_f, xs[i+1], res[0][i+1]);
       res[0][i+1] += res[0][i+1]*h*0.5 + res[0][i];
       res[1][i+1] = ys[i+1] - res[0][i+1];
-      //res[2][i+1]: bound
     }
+    res[2][i+1] = max(abs(ys_d3[i+1]), abs(ys_d3[i]));
+    res[2][i+1] *= (exp((xs[i+1]-xs[0])) - 1)/lipschitz_c[i_f];
+    res[2][i+1] *= h*h/12;
   }
 }
 
+void output(int i_f, int i_div) {
+  puts("func,h,x,y_h,y,|y - y_h|,bound");
+  REP(i,n[i_div]+1) 
+    printf("%d,%.3e,%.3e,%.3e,%.3e,%.3e,%.3e\n", 
+           i_f, h, xs[i], res[0][i], ys[i], res[1][i], res[2][i]);
+}
+
 int main() {
-//  REP(i,NF) REP(j,M) REP(k,I) {
-  REP(i,1) REP(j,1) REP(k,1) {
+  REP(i,NF) REP(j,M) REP(k,I) {
+if (i!=0 || j!=0 || k!=0) continue;
     init(i,j);
-    calc_ode_trapezoidal(i,j);
-//    output(i,j);
+    calc_ode_trapezoidal(i,j,k);
+    output(i,j);
   }
   return 0;
 }

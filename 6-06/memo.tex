@@ -38,8 +38,8 @@ where
   \item $L = 1$ is the Lipschitz constant of this function, 
   \item $h$ is the step size for the Euler method.
 \end{itemize}
-Hence, this bound is proportional to $h$ because other parameters and values are constants, which implies that if $h$ halves, then the error bound from above does so.\\
-We confirmed that this conjecture is true in the numerical results, in which the right most columns on the tables have the theoretical bounds above.\\
-Indeed, the value of $\left|y(x)-y_h(x)\right|$ in the second right column at the bottom on each table becomes one half approximately as $h$ halves ($.87218 \to .43737 \to .219$ as $h: .25 \to .125 \to .0625$).
+
+In the numerical results, when we focus on the rightmost and the second right columns on the tables, we notice that all the value of $\left|y(x)-y_h(x)\right|$ are less than the bounds from above, which agrees with the claim of the theorem $6.3$.\\
+The bound is proportional to $h$ because other parameters and values are constants. Hence, if $h$ halves, then the error bound from above does so. We confirmed this conjecture is true in the numerical results. Indeed, the value of $\left|y(x)-y_h(x)\right|$ at the bottom on each table becomes one half of it approximately as $h$ halves ($.87218 \to .43737 \to .219$ as $h: .25 \to .125 \to .0625$).\\
 
 \end{document} 

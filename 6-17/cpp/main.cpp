@@ -26,19 +26,20 @@ double lipschitz_c[NF] = {20, 0.25, 1, 1};
 double xs[N+1], ys[N+1], ys_d3[N+1];
 double res[3][N+1]; //y_h, |y_h - y|, bound(|y(t_n)-y_h(t_n)|)
 
+//y' = f(x,y)
 double f(int i_f, double x, double y) {
   double res = 0;
   switch(i_f) {
-    case 0:
+    case 0: //(a)
       res = -y*y;
       break;
-    case 1:
+    case 1: //(b)
       res = y*0.25*(1.0 - y*0.05);
       break;
-    case 2:
+    case 2: //(c)
       res = -y + cos(x)*2;
       break;
-    case 3:
+    case 3: //(d)
       res = y - sin(x)*2;
       break;
     default:
@@ -48,19 +49,20 @@ double f(int i_f, double x, double y) {
   return res;
 }
 
+//y(x, y) 
 double fn_y_d0(int i_f, double x) {
   double res = 0;
   switch(i_f) {
-    case 0:
+    case 0: //(a)
       res = 1.0/(1.0 + x);
       break;
-    case 1:
+    case 1: //(b)
       res = 20.0/(1.0 + exp(-x*0.25)*19);
       break;
-    case 2:
+    case 2: //(c)
       res = cos(x) + sin(x);
       break;
-    case 3:
+    case 3: //(d)
       res = cos(x) + sin(x);
       break;
     default:
@@ -70,6 +72,7 @@ double fn_y_d0(int i_f, double x) {
   return res;
 }
 
+//y'''
 double fn_y_d3(int i_f, double x) {
   double res = 0, tmp = 0;
   switch(i_f) {
@@ -121,7 +124,7 @@ void calc_ode_trapezoidal(int i_f, int i_div, int i_itr) {
   REP(i,n[i_div]) {
     //initial guess(midpoint method)
     res[0][i+1] = i ? res[0][i-1] + f(i_f, xs[i], res[0][i])*h*2 : res[0][0];
-    //iterations
+    //iterations(trapezoidal method)
     REP(j,i_itr+1) {
       res[0][i+1] = f(i_f, xs[i], res[0][i]) + f(i_f, xs[i+1], res[0][i+1]);
       res[0][i+1] = res[0][i+1]*h*0.5 + res[0][i];
@@ -142,7 +145,6 @@ void output(int i_f, int i_div) {
 
 int main() {
   REP(i,NF) REP(j,M) REP(k,I) {
-if (i!=0 || j!=1 || k!=0) continue;
     init(i,j);
     calc_ode_trapezoidal(i,j,k);
     output(i,j);

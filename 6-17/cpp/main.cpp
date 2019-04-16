@@ -15,10 +15,10 @@ using namespace std;
 
 typedef long long ll;
 const int NF = 4; //# of kinds of functions
-const int M = 4;  //# of kinds of step sizes
+const int M = 5;  //# of kinds of step sizes
 const int N = 1000; //(10-0)/.01
 const int I = 3;  //max # of iterations
-int n[M] = {20, 40, 100, 1000};
+int n[M] = {20, 40, 80, 100, 1000};
 double h;
 double a[NF] = {0, 0, 0, 0};
 double b[NF] = {10, 10, 10, 10}; 

@@ -26,20 +26,27 @@
 %----------------------------------------------------------------------
 
 \begin{document}
-Problem 47\\
-In this problem, the error bound of $\max_{x \in [a,b]}\left|y(x)-y_h(x)\right|$
-from above can be written as 
-$\frac{1}{L}\left(\exp\left((b-a)L\right) - 1\right) \frac{h}{2} \norm{y^{\prime\prime}}_{\infty}$ 
-by the theorem $6.3$ in the textbook, 
+\section{Problem 47, part(a)}
+The choosen function are $(c)$ and $(d)$ in the problem $6-16$.
+In case of using Runge-Kutta method, the error bound of $\max_{x \in [a,b]}\left|y(x)-y_h(x)\right|$ from above can be written as 
+$\frac{1}{L}\left(\exp\left((b-a)L\right) - 1\right) \tau(h)$, 
 where 
 \begin{itemize}
-  \item $\norm{y^{\prime\prime}}_{\infty} = \max_{x \in [a,b]}\left|y(x)-y_h(x)\right|$,
   \item $(a,b) = (0, 4)$,
   \item $L = 1$ is the Lipschitz constant of this function, 
-  \item $h$ is the step size for the Euler method.
+  \item $h$ is the step size for the Euler method,
+  \item $\tau(h) = \max_{x_n} \left|\frac{1}{h}\left(y(x_{n+1})-y(x_n)\right) - F(x_n, y(x_n), h; f)\right|$,
+  \item $F(x_n, y(x_n), h; f) = \frac{1}{6}\left(V_1 + 2V_2 + 3V_3 + V_4\right)$
+        defined by the Runge-Kutta method.
 \end{itemize}
-Hence, this bound is proportional to $h$ because other parameters and values are constants, which implies that if $h$ halves, then the error bound from above does so.\\
-We confirmed that this conjecture is true in the numerical results, in which the right most columns on the tables have the theoretical bounds above.\\
-Indeed, the value of $\left|y(x)-y_h(x)\right|$ in the second right column at the bottom on each table becomes one half approximately as $h$ halves ($.87218 \to .43737 \to .219$ as $h: .25 \to .125 \to .0625$).
+
+We confirmed that the numerical errors are bounded by the theoretical estimations as shown in the tables.\\
+We also compared the numerical results with the Runge-Kutta method and the Trapezoidal method obtained in the problem $6$-$17$. In all cases, the values of $\max_{x \in [a,b]}\left|y(x)-y_h(x)\right|$ with Runge-Kutta are smaller than the ones with the Trapezoidal method. 
+However, even if we use the Runge-Kutta method, the approximations fail when the step size $h$ is not small enough (for example, $h=.5$).
+
+\newpage
+\section{Problem 47, part(b)}
+We compare the numerical results with the Runge-Kutta method to the fourth order Taylor method obtained in the problem $6$-$46$. When we choose $h=.5$, the results with the Taylor method does not seem to converge correctly. On the other hand, the Runge-Kutta method works even in the case of $h=.5$.
+The theoretical bounds from above by the Richardson extrapolation are added in the rightmost columns on the tables.
 
 \end{document} 

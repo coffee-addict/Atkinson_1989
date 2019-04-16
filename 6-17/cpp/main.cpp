@@ -15,10 +15,10 @@ using namespace std;
 
 typedef long long ll;
 const int NF = 4; //# of kinds of functions
-const int M = 2;  //# of kinds of step sizes
-const int N = 40; //(10-0)/.25
+const int M = 4;  //# of kinds of step sizes
+const int N = 1000; //(10-0)/.01
 const int I = 3;  //max # of iterations
-int n[M] = {20, 40};
+int n[M] = {20, 40, 100, 1000};
 double h;
 double a[NF] = {0, 0, 0, 0};
 double b[NF] = {10, 10, 10, 10}; 
@@ -90,10 +90,10 @@ double fn_y_d3(int i_f, double x) {
       REP(i,4) res *= (1.0 + x);
       res = -6.0/res;
       break;
-    case 3:
+    case 2:
       res = -cos(x) + sin(x);
       break;
-    case 4:
+    case 3:
       res = -cos(x) + sin(x);
       break;
     default:
@@ -131,7 +131,7 @@ void calc_ode_trapezoidal(int i_f, int i_div, int i_itr) {
       res[1][i+1] = ys[i+1] - res[0][i+1];
     }
     res[2][i+1] = max(abs(ys_d3[i+1]), abs(ys_d3[i]));
-    res[2][i+1] *= (exp((xs[i+1]-xs[0])) - 1)/lipschitz_c[i_f];
+    res[2][i+1] *= (exp((xs[i+1]-xs[0])*lipschitz_c[i_f]*2) - 1)/lipschitz_c[i_f];
     res[2][i+1] *= h*h/12;
   }
 }

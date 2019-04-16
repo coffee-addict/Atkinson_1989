@@ -90,14 +90,15 @@ void init(int i_f, int i_div) {
   xs[n[i_div]] = b[i_f];
 }
 
-void calc_ode_taylor(int i_f, int i_div) {
+void calc_ode_runge_kutta(int i_f, int i_div) {
   res[0][0] = y_in[i_f];
   REP(i,n[i_div]) {
-    res[0][i+1] = res[0][i];
-    res[0][i+1] += fn_y_d1(i_f, xs[i], res[0][i])*h;
-    res[0][i+1] += fn_y_d2(i_f, xs[i], res[0][i])*h*h*0.5;
-    res[0][i+1] += fn_y_d3(i_f, xs[i], res[0][i])*h*h*h/6.0;
-    res[0][i+1] += fn_y_d4(i_f, xs[i], res[0][i])*h*h*h*h/24.0;
+    double v1 = fn_y_d1(i_f, xs[i], res[0][i]);
+    double v2 = fn_y_d1(i_f, xs[i]+h*0.5, res[0][i]+v1*h*0.5);
+    double v3 = fn_y_d1(i_f, xs[i]+h*0.5, res[0][i]+v2*h*0.5);
+    double v4 = fn_y_d1(i_f, xs[i]+h, res[0][i]+v3*h);
+    double v = (v1+v2*2+v3*2+v4);
+    res[0][i+1] = res[0][i] + v*h/6;
   }
 }
 
@@ -110,7 +111,7 @@ void output(int i_f, int i_div) {
 int main() {
   REP(i,NF) REP(j,M) {
     init(i,j);
-    calc_ode_taylor(i,j);
+    calc_ode_runge_kutta(i,j);
     output(i,j);
   }
   return 0;

@@ -2,6 +2,8 @@
 *.in
 *.out
 *.swp
+*.tex
+*.pdf
 *.aux
 *.dvi
 *.log
